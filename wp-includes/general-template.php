@@ -1641,7 +1641,7 @@ function get_calendar($initial = true, $echo = true) {
 	foreach ( $myweek as $wd ) {
 		$day_name = (true == $initial) ? $wp_locale->get_weekday_initial($wd) : $wp_locale->get_weekday_abbrev($wd);
 		$wd = esc_attr($wd);
-		$calendar_output .= "\n\t\t<th scope=\"col\" title=\"$wd\">$day_name</th>";
+		$calendar_output .= "\n\t\t<th scope=\"col\" title=\"$wd\"></th>";
 	}
 
 	$calendar_output .= '
