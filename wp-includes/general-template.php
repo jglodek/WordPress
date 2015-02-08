@@ -1676,7 +1676,10 @@ function get_calendar($initial = true, $echo = true) {
 
 	// Get days with posts
 	$dayswithposts = $wpdb->get_results("SELECT DISTINCT DAYOFMONTH(post_date)
-		FROM $wpdb->posts WHERE post_date >= '{$thisyear}-{$thismonth}-01 00:00:00'
+		FROM $wpdb->posts JOIN wp_term_relationships
+		ON ID = object_id
+		WHERE MONTH(post_date) = $this_month
+		AND term_taxonomy_id = $anniversaries_category
 		AND post_type = 'post' AND post_status = 'publish'
 		AND post_date <= '{$thisyear}-{$thismonth}-{$last_day} 23:59:59'", ARRAY_N);
 	if ( $dayswithposts ) {
