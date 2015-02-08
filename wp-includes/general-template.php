@@ -1598,16 +1598,30 @@ function get_calendar($initial = true, $echo = true) {
 	$last_day = date('t', $unixmonth);
 
 	// Get the next and previous month and year with at least one post
+	
+	function oyGetMeTheBloodyPreviousMonthCouldYa($month) {
+	  if($month==1) {
+	    return 12;
+	  } else return $month - 1;
+	};
+	// :*
+	$this_month = $thismonth;
+	$previous_month = oyGetMeTheBloodyPreviousMonthCouldYa($this_month);
+	$anniversaries_category = 46;
 	$previous = $wpdb->get_row("SELECT MONTH(post_date) AS month, YEAR(post_date) AS year
-		FROM $wpdb->posts
-		WHERE post_date < '$thisyear-$thismonth-01'
+		FROM $wpdb->posts JOIN wp_term_relationships
+		ON ID = object_id
+		WHERE MONTH(post_date) = $previous_month
+		AND term_taxonomy_id = anniversaries_category
 		AND post_type = 'post' AND post_status = 'publish'
 			ORDER BY post_date DESC
 			LIMIT 1");
 	$next = $wpdb->get_row("SELECT MONTH(post_date) AS month, YEAR(post_date) AS year
-		FROM $wpdb->posts
-		WHERE post_date > '$thisyear-$thismonth-{$last_day} 23:59:59'
+		FROM $wpdb->posts JOIN wp_term_relationships
+		ON ID = object_id
+		WHERE MONTH(post_date) = $this_month
 		AND post_type = 'post' AND post_status = 'publish'
+		AND term_taxonomy_id = anniversaries_category
 			ORDER BY post_date ASC
 			LIMIT 1");
 
